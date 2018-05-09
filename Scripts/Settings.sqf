@@ -1,14 +1,13 @@
 // CBA Settings
+#include "macro.hpp"
 #define		TITLE		"dzn Vehicle On Fire"
 #define		SETNAME(X)	format["dzn_VOF_%1", X]
 private _add = {
-	params ["_var","_type","_val",["_exp", nil]];
-	[format["dzn_VOF_%1",_var],_type,[localize format["STR_VOF_%1",_var], localize format ["STR_VOF_%1_desc", _var]],TITLE,_val,true,_exp] call CBA_Settings_fnc_init;
-};
+	params ["_var","_type","_val",["_exp", "No Expression"]];
+	private _arr = [format["dzn_VOF_%1",_var],_type,[localize format["STR_VOF_%1",_var], localize format ["STR_VOF_%1_desc", _var]],TITLE,_val,true];
+	if !(typename _exp == "STRING" && { _exp == "No Expression" }) then { _arr pushBack _exp; };
 
-private _parseTimeSetting = {
-
-
+	_arr call CBA_Settings_fnc_init;
 };
 
 // Common enable/disable switch
@@ -38,7 +37,7 @@ private _parseTimeSetting = {
 	, "EDITBOX"
 	, "15-30"
 	, {
-		["dzn_VOF_IgnitionTimeout",_this] call dzn_VOF_fnc_updateTimeoutSetting;
+		[SVAR(IgnitionTimeout),_this] call GVAR(fnc_updateTimeoutSetting);
 	}
 ] call _add;
 
@@ -48,78 +47,166 @@ private _parseTimeSetting = {
 	, "EDITBOX"
 	, "45-75"
 	, {
-		["dzn_VOF_BurningTime",_this] call dzn_VOF_fnc_updateTimeoutSetting;
+		[SVAR(BurningTime),_this] call GVAR(fnc_updateTimeoutSetting);
 	}
 ] call _add;
 
 // Chance of preventing engine destruction for Land vehicles
+[
+	"Land_EngineDestructionChance"
+	, "SLIDER"
+	, [0,100,90,0]
+] call _add;
+
 // Chance of preventing engine destruction for Air vehicles
-//
-
-
-
-
-
-
-
-
-
-
-
-
 [
-	SETNAME("TimeoutMin")
+	"Air_EngineDestructionChance"
 	, "SLIDER"
-	, [localize "STR_VOF_BurningTimeoutMin", localize "STR_VOF_BurningTimeoutMin_desc"] /* ["Burning out timeout (min)", "Minimum timeout before vehicle become destroyed by fire; Should be < Max"] */
-	, TITLE
-	, [5, 240, GVAR(timeoutRange) select 0, 0]
+	, [0,100,30,0]
+] call _add;
+
+// Apply to Cars
+[
+	"ApplyCars"
+	, "CHECKBOX"
 	, true
 	, {
-		if (_this <= (GVAR(timeoutRange) select 2)) then {
-			GVAR(timeoutRange) = [
-				_this
-				, floor( (_this + (GVAR(timeoutRange) select 2))/2 )
-				, GVAR(timeoutRange) select 2
-			];
+		[[["Car_F",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Car_F"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Trucks
+[
+	"ApplyTrucks"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Truck_F",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Truck_F"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Wheeled APC
+[
+	"ApplyWheeledAPC"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Wheeled_APC_F",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Wheeled_APC_F"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Tanks
+[
+	"ApplyTanks"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Tank_F",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Tank_F"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Helicopters
+[
+	"ApplyHeli"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Helicopter",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Helicopter"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Plane
+[
+	"ApplyPlane"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Plane",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Plane"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Apply to Ship
+[
+	"ApplyShip"
+	, "CHECKBOX"
+	, true
+	, {
+		[[["Ship",5]], _this] call GVAR(fnc_updateWhitelist);
+		[GVAR(Blacklist), ["Ship"], !_this] call GVAR(fnc_updateList);
+	}
+] call _add;
+
+// Burning vehicles custom whitelist
+[
+	"CustomWhitelist"
+	, "EDITBOX"
+	, ""
+	, {
+		private _vals = (call compile format ["[%1]", _this]) call GVAR(fnc_clearRoots);
+		private _list = call compile format ["[%1]", GVAR(CustomWhitelist)];
+
+		if !(_whitelist isEqualTo _vals) then {
+			[_list, false] call GVAR(fnc_updateWhitelist);
+			[_vals, true] call GVAR(fnc_updateWhitelist);
 		};
 	}
-] call CBA_Settings_fnc_init;
+] call _add;
+
+// Burning vehicles custom blacklist
 [
-	SETNAME("TimeoutMax")
-	, "SLIDER"
-	, [localize "STR_VOF_BurningTimeoutMax", localize "STR_VOF_BurningTimeoutMax_desc"]  /* ["Burning out timeout (min)", "Maximum timeout before vehicle become destroyed by fire; Should be > Min"]*/
-	, TITLE
-	, [5, 240, GVAR(timeoutRange) select 2, 0]
-	, true
+	"CustomBlacklist"
+	, "EDITBOX"
+	, ""
 	, {
-		if ((GVAR(timeoutRange) select 0) <= _this) then {
-			GVAR(timeoutRange) = [
-				GVAR(timeoutRange) select 0
-				, floor( ((GVAR(timeoutRange) select 0) + _this)/2 )
-				, _this
-			];
+		private _vals = (call compile format ["[%1]", _this]) call GVAR(fnc_clearRoots);
+        private _list = call compile format ["[%1]", GVAR(CustomBlacklist)];
+
+		if !(_list isEqualTo _vals) then {
+			[GVAR(Blacklist), _list, false] call GVAR(fnc_updateList);
+			[GVAR(Blacklist), _vals, true] call GVAR(fnc_updateList);
 		};
 	}
-] call CBA_Settings_fnc_init;
+] call _add;
 
+// ACE Cook-off disable vehicle list
 [
-	SETNAME("NonCookingList")
+	"Custom_ACE_Cookoff_Whitelist"
 	, "EDITBOX"
-	, [localize "STR_VOF_NonCookingList", localize "STR_VOF_NonCookingList_desc"]   /* ["Non-cooking off vehicles", "Vehicles that should not cookoff, in format [@Class, @StructuralDamage], e.g. ['CUP_btr_base', 15]"] */
-	, TITLE
-	, str(GVAR(nonCookingVehicles)) select [1, count str(GVAR(nonCookingVehicles)) -2]
-	, true
+	, ""
 	, {
-	    GVAR(nonCookingVehicles) = call compile format ["[%1]", _this];
+		GVAR(ACE_Cookoff_Whitelist) = call compile format ["[%1]", _this];
 	}
-] call CBA_Settings_fnc_init;
+] call _add;
 
+// ACE Cook-off enable vehicle list
 [
-	SETNAME("CookingList")
+	"Custom_ACE_Cookoff_Blacklist"
 	, "EDITBOX"
-	, [localize "STR_VOF_CookingList", localize "STR_VOF_CookingList_desc"]   /* ["Cooking off vehicles", "Vehicles of the same family as non-cooking off ones that can cookoff (e.g. BTR-82A)"] */
-	, TITLE
-	, GVAR(cookingVehicles) joinString ", "
+	, ""
+	, {
+		GVAR(ACE_Cookoff_Blacklist) = call compile format ["[%1]", _this];
+	}
+] call _add;
+
+// Catastrophic destruction enabled
+[
+	"CD_Enabled"
+	, "CHECKBOX"
 	, true
-	, { GVAR(cookingVehicles) = _this splitString ", "; }
-] call CBA_Settings_fnc_init;
+] call _add;
+
+// Catastrophic destruction damage limit
+[
+	"CD_DamageSetting"
+	, "EDITBOX"
+	, "20"
+	, {
+		GVAR(CD_Damage) = parseNumber _this;
+	}
+] call _add;

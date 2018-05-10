@@ -6,9 +6,6 @@ GVAR(Blacklist) = [];
 GVAR(ACE_Cookoff_Whitelist) = [];
 GVAR(ACE_Cookoff_Blacklist) = [];
 
-GVAR(CustomWhitelist) = [];
-GVAR(CustomBlacklist) = [];
-
 
 // Kek
 
@@ -31,7 +28,27 @@ if (!GVAR(Enabled)) exitWith {};
 	call GVAR(fnc_publish);
 	while { true } do {
 		{
+			private _v = _x;
 
+			private _class = typeOf _v;
+
+			// Class IN whitelist and there is no class in blacklist
+			private _canBurn = (
+				{_v isKindOf (_x select 0)} count GVAR(Whitelist) > 0
+				&& {_v isKindOf _x} count GVAR(Blacklist) == 0
+			);
+
+			private _canCookoff = (
+				{_v isKindOf _x} count GVAR(ACE_Cookoff_Blacklist) > 0
+				&& {_v isKindOf _x} count GVAR(ACE_Cookoff_Whitelist) == 0
+			);
+			private _strDamageLimit = 0;
+
+
+
+		} forEach vehicles;
+
+		sleep GVAR(CheckTimeout);
 
 		/*
 			private _v = _x;
@@ -57,7 +74,8 @@ if (!GVAR(Enabled)) exitWith {};
 
 			};
 		} forEach vehicles;
-*/
+
 		sleep GVAR(CheckTimeout);
+		*/
 	};
 };

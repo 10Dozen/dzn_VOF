@@ -1,7 +1,39 @@
 // CBA Settings
 #include "macro.hpp"
 #define		TITLE		"dzn Vehicle On Fire"
-#define		SETNAME(X)	format["dzn_VOF_%1", X]
+#define		ACE_NOT_COOKOFFING_LIST \
+CUP_BMP2_HQ_Base \
+, CUP_BMP2_Ambul_Base \
+, CUP_BRDM2_Base \
+, CUP_BTR40_MG_Base \
+, CUP_BTR60_Base \
+, CUP_GAZ_Vodnik_Base \
+, CUP_M113_Base \
+, CUP_AAV_Base \
+, CUP_BAF_Jackal2_BASE_D \
+, CUP_Mastiff_Base \
+, CUP_RG31_BASE \
+, CUP_Ridgback_Base \
+, CUP_B_LAV25M240_USMC \
+, CUP_B_LAV25_HQ_USMC \
+, CUP_StrykerBase \
+, CUP_FV432_Bulldog_Base \
+, rhs_btr_base \
+, rhsusf_m113tank_base \
+, rhsusf_rg33_base
+
+#define		ACE_COOKOFING_LIST \
+CUP_BRDM2_ATGM_Base \
+, CUP_M163_Base \
+, CUP_B_M1135_ATGMV_Desert \
+, CUP_B_M1128_MGS_Desert \
+, CUP_GAZ_Vodnik_BPPU_Base \
+, rhs_btr80a_msv \
+, rhs_btr80a_vdv \
+, rhs_btr80a_vv \
+, rhs_btr80a_vmf
+
+
 private _add = {
 	params ["_var","_type","_val",["_exp", "No Expression"]];
 	private _arr = [format["dzn_VOF_%1",_var],_type,[localize format["STR_VOF_%1",_var], localize format ["STR_VOF_%1_desc", _var]],TITLE,_val,true];
@@ -9,6 +41,9 @@ private _add = {
 
 	_arr call CBA_Settings_fnc_init;
 };
+
+
+
 
 // Common enable/disable switch
 [
@@ -144,43 +179,35 @@ private _add = {
 
 // Burning vehicles custom whitelist
 [
-	"CustomWhitelist"
+	"CustomWhitelistSetting"
 	, "EDITBOX"
 	, ""
 	, {
 		private _vals = (call compile format ["[%1]", _this]) call GVAR(fnc_clearRoots);
-		private _list = call compile format ["[%1]", GVAR(CustomWhitelist)];
 
-		if !(_whitelist isEqualTo _vals) then {
-			[_list, false] call GVAR(fnc_updateWhitelist);
-			[_vals, true] call GVAR(fnc_updateWhitelist);
+		if !(isNil SVAR(CustomWhitelist)) then {
+			[GVAR(CustomWhitelist), false] call GVAR(fnc_updateWhitelist);
 		};
+
+		[_vals, true] call GVAR(fnc_updateWhitelist);
+		GVAR(CustomWhitelist) = _vals;
 	}
 ] call _add;
 
 // Burning vehicles custom blacklist
 [
-	"CustomBlacklist"
+	"CustomBlacklistSetting"
 	, "EDITBOX"
 	, ""
 	, {
-		private _vals = (call compile format ["[%1]", _this]) call GVAR(fnc_clearRoots);
-        private _list = call compile format ["[%1]", GVAR(CustomBlacklist)];
+		private _vals = (_this splitString ", ") call GVAR(fnc_clearRoots); /* (call compile format ["[%1]", _this]) */
 
-		if !(_list isEqualTo _vals) then {
-			[GVAR(Blacklist), _list, false] call GVAR(fnc_updateList);
-			[GVAR(Blacklist), _vals, true] call GVAR(fnc_updateList);
+		if !(isNil SVAR(CustomBlacklist)) then {
+			[GVAR(Blacklist), GVAR(CustomBlacklist), false] call GVAR(fnc_updateList);
 		};
-	}
-] call _add;
 
-// ACE Cook-off disable vehicle list
-[
-	"Custom_ACE_Cookoff_Whitelist"
-	, "EDITBOX"
-	, ""
-	, {
-		GVAR(ACE_Cookoff_Whitelist) = call compile format ["[%1]", _this];
+		[GVAR(Blacklist), _vals, true] call GVAR(fnc_updateList);
+		GVAR(CustomBlacklist) = _vals;
 	}
 ] call _add;
 
@@ -188,9 +215,19 @@ private _add = {
 [
 	"Custom_ACE_Cookoff_Blacklist"
 	, "EDITBOX"
-	, ""
+	,  QUOTE(ACE_NOT_COOKOFFING_LIST)
 	, {
-		GVAR(ACE_Cookoff_Blacklist) = call compile format ["[%1]", _this];
+		GVAR(ACE_Cookoff_Blacklist) = _this splitString ", ";
+	}
+] call _add;
+
+// ACE Cook-off disable vehicle list
+[
+	"Custom_ACE_Cookoff_Whitelist"
+	, "EDITBOX"
+	, QUOTE(ACE_COOKOFING_LIST)
+	, {
+		GVAR(ACE_Cookoff_Whitelist) = _this splitString ", ";
 	}
 ] call _add;
 

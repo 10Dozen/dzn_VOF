@@ -10,3 +10,4 @@ COMPILE_FUNCTION(fnc_updateList);
 
 
 COMPILE_FUNCTION(fnc_publish);
+COMPILE_FUNCTION(fnc_isWhitelisted);

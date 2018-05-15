@@ -15,19 +15,15 @@ switch toLower(_hitpoint) do {
 	// Vehicle fire effect
 	case "hitengine";
 	case "hitfuel": {
-		//>> TODO: Here we should check Ignition on hit chance
-		[_vehicle,_damage] call GVAR(fnc_handle_setOnFire);
-
-		//>> TODO: Here we should check Chance of Engine Destruction
-		_damage
+		[_vehicle,_damage] call GVAR(fnc_handle_setOnFire)
 	};
 
 	// Structural OR Catastrophic destruction effect
 	case "hithull";
 	case "#structural": {
-		//>> TODO: Check is damage catastrophical and exit with CD effect
-
-		//>> TODO: Update structural damage
+		//>> TODO: Handle Structural damage function
+			//>> TODO: Check is damage catastrophical and exit with CD effect
+			//>> TODO: Update structural damage
 
 		//>> TODO: Return 0.89 damage
 

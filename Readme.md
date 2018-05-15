@@ -4,15 +4,15 @@
 #### Version: 4
 
 CRs:
-- Update Settings with: Chance of Burn per hit
-- Update Settings with: Burning start time
-- Update Settings with: Burning time
-- Update Settings with: Quick apply to classes
-- Update Settings with: Custom whitelist and blacklist
-- Update Settings with: Custom ACE-cookoff whitelist and blacklist
+- [+] Update Settings with: Chance of Burn per hit
+- [+] Update Settings with: Burning start time
+- [+] Update Settings with: Burning time
+- [+] Update Settings with: Quick apply to classes
+- [+] Update Settings with: Custom whitelist and blacklist
+- [+] Update Settings with: Custom ACE-cookoff whitelist and blacklist
 - Update Settings with: Planes/Helicopters massive flame option
-- Update Settings with: Planes/Helicopters prevent engine destruction chance
-- Update Settings with: Land vehicle prevent engine destruction chance
+- [+] Update Settings with: Planes/Helicopters prevent engine destruction chance
+- [+] Update Settings with: Land vehicle prevent engine destruction chance
 - Combine ACE Cookoff and VOF behaviors: Hit engine/fuel -> fire started -> before sequence ends, if tank/ifv has 25mm+ ammo on board - cookoff is triggered and ka-boom; if not - ammunition cookoff started for few seconds and then vehicle burns down (then ace handled ammo cookoff starts on wreck, so it may be too heavy as both will be executed same time)
 - Add logic for Chance of Burn per hit
 - Add logic for Burning start time

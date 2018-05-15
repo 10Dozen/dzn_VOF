@@ -1,6 +1,6 @@
 /*
 	author: 10Dozen
-	description: Checks given class from any level of hierarchical class tree - is it whitelisted or blacklisted in given lists
+	description: Checks given class from any level of class hierarchical class tree - is it whitelisted or blacklisted in given lists
 	input: 0: CLASS - vehicle class, 1: ARRAY - 1-dimensional whitelist of classes, 2: ARRAY - 1-dimensional blacklist of classes
 	returns: BOOL - is class whitelisted or NOT blacklisted
 	example:

@@ -7,6 +7,7 @@
 		_val = "MyCar" call dzn_VOF_fnc_getStructuralDamageLimit; // return 5 as nearest class is Car_F with 5
 */
 
+
 // private _class = _this;
 
 5

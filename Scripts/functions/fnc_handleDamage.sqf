@@ -5,6 +5,7 @@
 	returns: nothing
 	example:
 */
+#include "..\macro.hpp"
 
 params ["_vehicle", "", "_damage", "_source", "_ammo", "_hitIndex", "_shooter", "_hitpoint"];
 
@@ -15,7 +16,7 @@ switch toLower(_hitpoint) do {
 	// Vehicle fire effect
 	case "hitengine";
 	case "hitfuel": {
-		[_vehicle,_damage] call GVAR(fnc_handle_setOnFire)
+		[_vehicle,_damage,toLower(_hitpoint)] call GVAR(fnc_handle_setOnFire)
 	};
 
 	// Structural OR Catastrophic destruction effect

@@ -21,6 +21,13 @@ CRs:
 - Add logic for Planes/Helicopters prevent engine destruction chance
 - Add logic for Land vehicle prevent engine destruction chance
 
+#### Notes:
+Engine selections names: engine_1_hit, engine_2_hit, engine_hit
+Fuel: fuel_hit
+Engine hitpoint selections: hitengine1, hitengine2, hitengine
+Fuel hitpoint: hitfuel
+
+
 
 
 <br /><br /><br /><br /><hr />

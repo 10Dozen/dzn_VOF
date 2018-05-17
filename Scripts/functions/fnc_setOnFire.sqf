@@ -23,6 +23,7 @@ _timeout = selectRandom GVAR(BurningTime);
 	params["_v","_timeout"];
 
 	private _pos = [0,0,0];
+
 /*
 	_pos = _v modelToWorld (
 			(["motor","engine"] apply { _v selectionPosition _x }) select { !(_x isEqualTo [0,0,0]) } select 0

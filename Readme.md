@@ -1,30 +1,9 @@
 ## dzn Vehicle On Fire
 
-#### Requirement: CBA_A3
-#### Version: 4
+#### Version: 3
 
-CRs:
-- Update Settings with: Chance of Burn per hit
-- Update Settings with: Burning start time
-- Update Settings with: Burning time
-- Update Settings with: Quick apply to classes
-- Update Settings with: Custom whitelist and blacklist
-- Update Settings with: Custom ACE-cookoff whitelist and blacklist
-- Update Settings with: Planes/Helicopters massive flame option
-- Update Settings with: Planes/Helicopters prevent engine destruction chance
-- Update Settings with: Land vehicle prevent engine destruction chance
-- Combine ACE Cookoff and VOF behaviors: Hit engine/fuel -> fire started -> before sequence ends, if tank/ifv has 25mm+ ammo on board - cookoff is triggered and ka-boom; if not - ammunition cookoff started for few seconds and then vehicle burns down (then ace handled ammo cookoff starts on wreck, so it may be too heavy as both will be executed same time)
-- Add logic for Chance of Burn per hit
-- Add logic for Burning start time
-- Add logic for Burning time
-- Add logic for Planes/Helicopters massive flame option
-- Add logic for Planes/Helicopters prevent engine destruction chance
-- Add logic for Land vehicle prevent engine destruction chance
-
-
-
-<br /><br /><br /><br /><hr />
 #### Description
+
 #### Requirement: CBA_A3
 
 Mod prevents APCs (and any other vehicles that can be configured in mod's settings) from instant destruction in the fireball and adds vehicle fire instead, that burns vehicle after some time
